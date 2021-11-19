@@ -5,7 +5,7 @@ secrets = {
     'ssid' : 'myssid',
     'password' : 'wifipassword',
     'api_key' : "1234567890abcdefg",
-    'stock1' : 'AAPL',
+    'stock1' : 'DJI',
     'stock2' : 'GOOG',
     'stock3' : 'TSLA',
     'stock4' : 'AAPL',
