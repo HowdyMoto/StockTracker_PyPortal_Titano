@@ -2,24 +2,25 @@ import time
 import board
 import busio
 import displayio
-import terminalio
 from digitalio import DigitalInOut
+import microcontroller
 
 from adafruit_display_text import label
-from adafruit_display_shapes.triangle import Triangle
 from adafruit_display_shapes.rect import Rect
 from adafruit_bitmap_font import bitmap_font
 
 import adafruit_requests as requests
-#from adafruit_pyportal import PyPortal
 import adafruit_esp32spi.adafruit_esp32spi_socket as socket
 from adafruit_esp32spi import adafruit_esp32spi
+
+#from adafruit_pyportal import PyPortal
 
 ################### Global vars ########################################################
 WHITE = 0xFFFFFF
 BLACK = 0x000000
 GREEN = 0x00FF00
 RED =   0xFF0000
+DARKRED = 0xBB0000
 URL_BASE = "https://eodhistoricaldata.com/api/real-time/"
 URL_APIKEY = "?api_token="
 URL_FORMAT = "&fmt=json"
@@ -28,7 +29,7 @@ URL1 = "https://eodhistoricaldata.com/api/real-time/AAPL?api_token=5e3667b5434e1
 URL2 = "https://eodhistoricaldata.com/api/real-time/GOOG?api_token=5e3667b5434e12.89123274&fmt=json"
 URL3 = "https://eodhistoricaldata.com/api/real-time/TSLA?api_token=5e3667b5434e12.89123274&fmt=json"
 
-num_loops = 0 # Useful for debugging, tracks how many times we've successfully requested and received all 3 stock data
+NUM_LOOPS = 0 # Useful for debugging, tracks how many times we've successfully requested data
 
 ######## Get info from secrets.py ######################################################
 try:
@@ -78,6 +79,8 @@ indent_price = 112
 indent_change = 240
 vert_spacing = 48
 
+background_rect = Rect(0, 0, display.width, display.height, fill=BLACK)
+
 pricedata_group = displayio.Group()
 label_stockname1 = label.Label(font, text=secrets["stock1"], color=WHITE, x=indent_label, y=indent_top )
 label_stockname2 = label.Label(font, text=secrets["stock2"], color=WHITE, x=indent_label, y=(indent_top + vert_spacing) )
@@ -109,6 +112,7 @@ label_stock7_change = label.Label(font, text=str(""), scale=1, color=WHITE, x=in
 label_stock8_change = label.Label(font, text=str(""), scale=1, color=WHITE, x=indent_change, y=(indent_top + vert_spacing*7) )
 label_stock9_change = label.Label(font, text=str(""), scale=1, color=WHITE, x=indent_change, y=(indent_top + vert_spacing*8) )
 
+pricedata_group.append(background_rect)
 pricedata_group.append(label_stockname1)
 pricedata_group.append(label_stockname2)
 pricedata_group.append(label_stockname3)
@@ -150,8 +154,6 @@ def getprice(asset, pricelabel, changelabel):
         price = "%.2f" % price_unformatted                            # Create a string from a float and round the price to 2 decimal places
         price_delta = "%.1f" % price_delta_unformatted                # Create a string from a float and round the price to 2 decimal places 
 
-        #price_delta = round(price_delta_unformatted, 1)              # Round the percentage change 1 decimal place
-
         if price_delta_unformatted >= 0:
             pricelabel.color = GREEN
             changelabel.color = GREEN
@@ -162,11 +164,9 @@ def getprice(asset, pricelabel, changelabel):
         changelabel.text = price_delta + "%"
 
     except (ValueError, RuntimeError) as e:
-        print("Error occurred when requesting data from server, retrying in 60 seconds. -", e)
-        print("Resetting esp32")
-        esp32.reset()
-        time.sleep(60)
-
+        print("Error: ", e)
+        background_rect.fill = DARKRED
+        #microcontroller.reset()
 
 ######## MAIN LOOP #####################################################################
 while True:
@@ -180,6 +180,6 @@ while True:
     getprice(secrets["stock8"], label_stock8_price, label_stock8_change)
     getprice(secrets["stock9"], label_stock9_price, label_stock9_change)
 
-    num_loops += 1
-    print("Loops=" + str(num_loops) )
+    NUM_LOOPS += 1
+    print("Loops=" + str(NUM_LOOPS) )
     time.sleep(60)
