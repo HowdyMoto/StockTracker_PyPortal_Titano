@@ -4,7 +4,7 @@
 secrets = {
     'ssid' : 'myssid',
     'password' : 'wifipassword',
-    'api_key' : "1234567890abcdefg",
+    'eodhistoricaldata_api_key' : "1234567890abcdefg",
     'stock1' : 'GOOG',
     'stock2' : 'NVDA',
     'stock3' : 'TSLA',

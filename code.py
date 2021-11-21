@@ -70,7 +70,7 @@ while not esp32.is_connected:
 print("Connected to", str(esp32.ssid, "utf-8"), "\tRSSI:", esp32.rssi)
 print("My IP address is", esp32.pretty_ip(esp32.ip_address))
 
-api_key = secrets['api_key']
+api_key = secrets['eodhistoricaldata_api_key']
 
 ######## FINAL UI setup ##############################################################
 indent_top = 48
