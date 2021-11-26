@@ -72,7 +72,7 @@ print("My IP address is", esp32.pretty_ip(esp32.ip_address))
 
 api_key = secrets['eodhistoricaldata_api_key']
 
-######## FINAL UI setup ##############################################################
+######## UI setup ##############################################################
 indent_top = 48
 indent_label = 24
 indent_price = 112
@@ -145,7 +145,7 @@ display.show(pricedata_group)
 
 def getprice(asset, pricelabel, changelabel):
     try:
-        response = requests.get(URL_BASE + asset + URL_APIKEY + secrets["api_key"] + URL_FORMAT)
+        response = requests.get(URL_BASE + asset + URL_APIKEY + api_key + URL_FORMAT)
         response_json = response.json()
 
         price_unformatted = float(response_json["close"])
@@ -166,7 +166,7 @@ def getprice(asset, pricelabel, changelabel):
     except (ValueError, RuntimeError) as e:
         print("Error: ", e)
         background_rect.fill = DARKRED
-        #microcontroller.reset()
+        microcontroller.reset()
 
 ######## MAIN LOOP #####################################################################
 while True:
