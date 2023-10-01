@@ -67,8 +67,6 @@ while not esp32.is_connected:
     except RuntimeError as e:
         print("could not connect to WiFi, retrying: ", e)
         continue
-print("Connected to", str(esp32.ssid, "utf-8"), "\tRSSI:", esp32.rssi)
-print("My IP address is", esp32.pretty_ip(esp32.ip_address))
 
 api_key = secrets['eodhistoricaldata_api_key']
 
