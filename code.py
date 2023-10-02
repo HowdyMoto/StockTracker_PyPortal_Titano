@@ -180,4 +180,4 @@ while True:
 
     NUM_LOOPS += 1
     print("Loops=" + str(NUM_LOOPS) )
-    time.sleep(3600)
+    time.sleep(4400)
