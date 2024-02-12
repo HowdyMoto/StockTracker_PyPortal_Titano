@@ -1,7 +1,7 @@
 # StockTracker_PyPortal_Titano
  A stock tracker for AdaFruit PyPortal Titano
 
-Step1: Get a PyPortal Titano:
+Step 1: Get a PyPortal Titano:
 https://www.adafruit.com/product/4444
 
 Step 2: Upload this code to the Titano
